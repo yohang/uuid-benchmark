@@ -40,9 +40,9 @@ jobs:
                         compose.yaml
                         compose.override.yaml
                     set: |
-                        *.cache-from=type=gha,scope=php-${{ github.ref }}
-                        *.cache-from=type=gha,scope=php-refs/heads/main
-                        *.cache-to=type=gha,scope=php-${{ github.ref }},mode=max
+                        *.cache-from=type=gha,scope=${{ github.ref }}
+                        *.cache-from=type=gha,scope=refs/heads/main
+                        *.cache-to=type=gha,scope=${{ github.ref }},mode=max
             -   name: Build docker images (latest if main)
                 uses: docker/bake-action@v5
                 if: github.ref == 'refs/heads/main'
@@ -56,9 +56,9 @@ jobs:
                         compose.yaml
                         compose.override.yaml
                     set: |
-                        *.cache-from=type=gha,scope=php-${{ github.ref }}
-                        *.cache-from=type=gha,scope=php-refs/heads/main
-                        *.cache-to=type=gha,scope=php-${{ github.ref }},mode=max
+                        *.cache-from=type=gha,scope=${{ github.ref }}
+                        *.cache-from=type=gha,scope=refs/heads/main
+                        *.cache-to=type=gha,scope=${{ github.ref }},mode=max
 
     benchmark:
         name: Benchmark
@@ -66,7 +66,7 @@ jobs:
         needs: build
         strategy:
             matrix:
-                id_type: [ int, uuid1, uuid4, uuid6, uuid7 ]
+                id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
                 number_of_root_entity: [ 1_000, 10_000, 100_000 ]
         steps:
             -   name: Checkout repository

@@ -10,3 +10,5 @@
 ###< symfony/framework-bundle ###
 
 infra/frankenphp/tls
+
+.configured

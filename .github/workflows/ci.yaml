@@ -73,6 +73,6 @@ jobs:
             -   name: Checkout repository
                 uses: actions/checkout@v4
             -   name: Run services
-                run: docker compose -f compose.yaml up -d --pull --wait --wait-timeout 120 || (docker compose logs && exit 1)
+                run: docker compose -f compose.yaml up -d --wait --wait-timeout 120 || (docker compose logs && exit 1)
             -   name: Run benchmark
                 run: docker compose -f compose.yaml exec -e ID_TYPE=${{ matrix.id_type }} -e NUMBER_OF_ROOT_ENTITY=${{ matrix.number_of_root_entity }} php composer benchmark

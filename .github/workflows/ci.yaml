@@ -85,8 +85,8 @@ jobs:
             -   name: Upload benchmark results
                 uses: actions/upload-artifact@v4
                 with:
-                    name: var/benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv
-                    path: benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv
+                    name: benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv
+                    path: var/benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv
 
     merge:
         runs-on: ubuntu-latest
@@ -97,3 +97,4 @@ jobs:
                 with:
                     name: benchmark-results.csv
                     pattern: benchmark-*.csv
+                    delete-merged: true

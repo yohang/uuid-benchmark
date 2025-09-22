@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     env(ID_TYPE): !php/const App\EventListener\BookMappingListener::ID_TYPE_INT
-    env(NUMBER_OF_ROOT_ENTITY): 10_000
+    env(NUMBER_OF_ROOT_ENTITY): '10000'
+    env(OUTPUT_CSV_FILE): '%kernel.project_dir%/var/benchmark-%env(ID_TYPE)%-%env(NUMBER_OF_ROOT_ENTITY)%.csv'
 
 services:
     # default configuration for services in *this* file

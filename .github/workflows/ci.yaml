@@ -82,3 +82,18 @@ jobs:
                 run: docker compose -f compose.yaml up -d --wait --wait-timeout 120 || (docker compose logs && exit 1)
             -   name: Run benchmark
                 run: docker compose -f compose.yaml exec -e ID_TYPE=${{ matrix.id_type }} -e NUMBER_OF_ROOT_ENTITY=${{ matrix.number_of_root_entity }} php composer benchmark
+            -   name: Upload benchmark results
+                uses: actions/upload-artifact@v4
+                with:
+                    name: var/benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv
+                    path: benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv
+
+    merge:
+        runs-on: ubuntu-latest
+        needs: [ benchmark ]
+        steps:
+            -   name: Merge benchmark results
+                uses: actions/upload-artifact/merge@v4
+                with:
+                    name: benchmark-results.csv
+                    pattern: benchmark-*.csv

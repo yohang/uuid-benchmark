@@ -1,15 +1,13 @@
 #syntax=docker/dockerfile:1
 
-LABEL org.opencontainers.image.source=https://github.com/yohang/uuid-benchmark
-LABEL org.opencontainers.image.licenses=MIT
-
 ARG FRANKENPHP_VERSION=1.9
 ARG PHP_VERSION=8.4
 ARG DEBIAN_VERSION=trixie
 
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-${DEBIAN_VERSION} AS php
 
-LABEL org.opencontainers.image.source=https://github.com/yohang/uuid-benchmark
+LABEL org.opencontainers.image.source=https://github.com/yohang/uuid-benchmark/php
+LABEL org.opencontainers.image.licenses=MIT
 
 
 # persistent / runtime deps

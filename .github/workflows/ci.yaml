@@ -67,7 +67,7 @@ jobs:
         strategy:
             matrix:
                 id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
-                number_of_root_entity: [ 1_000, 10_000, 100_000 ]
+                number_of_root_entity: [ 10_000, 100_000 ]
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v4

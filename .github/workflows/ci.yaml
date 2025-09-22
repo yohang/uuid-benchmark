@@ -65,11 +65,14 @@ jobs:
         strategy:
             matrix:
                 id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
-                number_of_root_entity: [ 10_000, 100_000 ]
+                number_of_root_entity: [ 10000, 100000 ]
+        permissions:
+            contents: read
+            packages: read
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v4
             -   name: Run services
-                run: docker compose -f compose.yaml up -d --wait --wait-timeout 120 || (docker compose logs && exit 1)
+                run: docker compose -f compose.yaml up -d --pull --wait --wait-timeout 120 || (docker compose logs && exit 1)
             -   name: Run benchmark
                 run: docker compose -f compose.yaml exec -e ID_TYPE=${{ matrix.id_type }} -e NUMBER_OF_ROOT_ENTITY=${{ matrix.number_of_root_entity }} php composer benchmark

@@ -29,7 +29,7 @@ jobs:
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
             -   name: Build docker images (branch or tag name)
-                uses: docker/bake-action@v5
+                uses: docker/bake-action@v6
                 env:
                     IMAGE_VERSION: ${{ github.ref_name }}
                 with:
@@ -44,7 +44,7 @@ jobs:
                         *.cache-from=type=gha,scope=refs/heads/main
                         *.cache-to=type=gha,scope=${{ github.ref }},mode=max
             -   name: Build docker images (latest if main)
-                uses: docker/bake-action@v5
+                uses: docker/bake-action@v6
                 if: github.ref == 'refs/heads/main'
                 env:
                     IMAGE_VERSION: ${{ github.ref_name }}
@@ -63,7 +63,7 @@ jobs:
     benchmark:
         name: Benchmark
         runs-on: ubuntu-latest
-        needs: build
+        needs: [ build ]
         strategy:
             matrix:
                 id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]

@@ -65,13 +65,19 @@ jobs:
         strategy:
             matrix:
                 id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
-                number_of_root_entity: [ 10000, 100000 ]
+                number_of_root_entity: [ 10000, 100000, 1000000 ]
         permissions:
             contents: read
             packages: read
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v4
+            -   name: Login to GitHub Container Registry
+                uses: docker/login-action@v3
+                with:
+                    registry: ghcr.io
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GITHUB_TOKEN }}
             -   name: Run services
                 run: docker compose -f compose.yaml up -d --wait --wait-timeout 120 || (docker compose logs && exit 1)
             -   name: Run benchmark

@@ -10,13 +10,12 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
+permissions: write-all
+
 jobs:
     build:
         name: Build
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v4
@@ -47,7 +46,7 @@ jobs:
                 uses: docker/bake-action@v6
                 if: github.ref == 'refs/heads/main'
                 env:
-                    IMAGE_VERSION: ${{ github.ref_name }}
+                    IMAGE_VERSION: latest
                 with:
                     pull: true
                     push: true

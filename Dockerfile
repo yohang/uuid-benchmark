@@ -6,7 +6,7 @@ ARG DEBIAN_VERSION=trixie
 
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-${DEBIAN_VERSION} AS php
 
-LABEL org.opencontainers.image.source=https://github.com/yohang/uuid-benchmark/php
+LABEL org.opencontainers.image.source=https://github.com/yohang/uuid-benchmark
 LABEL org.opencontainers.image.licenses=MIT
 
 

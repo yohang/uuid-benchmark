@@ -74,4 +74,4 @@ jobs:
             -   name: Run services
                 run: docker compose up -d --wait
             -   name: Run benchmark
-                run: docker compose exec -e ID_TYPE=${{ matrix.id_type }} -e NUMBER_OF_ROOT_ENTITY=${{ matrix.id_type }} php composer benchmark
+                run: docker compose exec -e ID_TYPE=${{ matrix.id_type }} -e NUMBER_OF_ROOT_ENTITY=${{ matrix.number_of_root_entity }} php composer benchmark

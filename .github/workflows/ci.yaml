@@ -64,8 +64,10 @@ jobs:
         needs: [ build ]
         strategy:
             matrix:
-                id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
-                number_of_root_entity: [ 10000, 100000, 1000000 ]
+                # id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
+                # number_of_root_entity: [ 10000, 100000, 1000000 ]
+                id_type: [ int, uuid_v1 ]
+                number_of_root_entity: [ 10000 ]
         permissions:
             contents: read
             packages: read
@@ -87,6 +89,8 @@ jobs:
                     mkdir -p ./var
                     docker compose cp php:/app/var/benchmark-${{ matrix.id_type }}-${{ matrix.number_of_root_entity }}.csv ./var/
                     ls -al var/*
+            -   name: Stop services
+                run: docker compose -f compose.yaml down -v
             -   name: Upload benchmark results
                 uses: actions/upload-artifact@v4
                 with:
@@ -98,9 +102,20 @@ jobs:
         runs-on: ubuntu-latest
         needs: [ benchmark ]
         steps:
+            -   name: Download benchmark results
+                uses: actions/download-artifact@v5
+                with:
+                    pattern: benchmark-*.csv
             -   name: Merge benchmark results
-                uses: actions/upload-artifact/merge@v4
+                run: |
+                    head -1 $(ls benchmark-*.csv | head -1) > benchmark-results.csv
+                    find . -type f -name "benchmark-*.csv" -exec tail -1 {} \; | sort >> benchmark-results.csv
+                    cat benchmark-results.csv
+            -   name: Upload merged benchmark results
+                uses: actions/upload-artifact@v4
                 with:
                     name: benchmark-results.csv
-                    pattern: benchmark-*.csv
-                    delete-merged: true
+                    path: benchmark-results.csv
+            -   uses: geekyeggo/delete-artifact@v5
+                with:
+                    name: benchmark-*-*.csv

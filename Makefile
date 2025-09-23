@@ -85,3 +85,6 @@ benchmark: ## Reset project fixtures
 	for ID_TYPE in $(ID_TYPES); do \
 		$(DOCKER_COMPOSE) exec -eID_TYPE=$$ID_TYPE -eAPP_ENV=$(env) php composer benchmark; \
 	done
+
+test-workflow:
+	gh act --artifact-server-path=$HOME/.local.share/act/

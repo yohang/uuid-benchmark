@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        Optimized page (stage 2)
+        <a href="{{ path('homepage') }}"><small>back</small></a>
+    </h1>
+
+    <ul>
+        {% for book in pager %}
+            <li>
+                <h2>{{ book.title }}</h2>
+                <h3>Reviews</h3>
+                <ul>
+                    {% for row in reviews_by_book[book.id] %}
+                        {% set review = row.review %}
+                        {% set author_review_count = row.author_review_count %}
+
+                        <li>
+                            <h4>{{ review.author }} ({{ author_review_count }})</h4>
+                            {{ review.review }}
+                        </li>
+                    {% else %}
+                        <li>No reviews</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {{ pagerfanta(pager) }}
+{% endblock %}

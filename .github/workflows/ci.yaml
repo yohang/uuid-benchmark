@@ -105,11 +105,7 @@ jobs:
                 with:
                     pattern: benchmark-*.csv
             -   name: Merge benchmark results
-                run: |
-                    ls -al ./
-                    head -1 ./$(ls benchmark-*.csv | head -1) > benchmark-results.csv
-                    find . -type f -name "benchmark-*-*.csv" -exec tail -1 {} \; | sort >> benchmark-results.csv
-                    cat benchmark-results.csv
+                run: find . -type f -name "benchmark-*-*.csv" -exec tail -1 {} \; | sort >> benchmark-results.csv
             -   name: Upload merged benchmark results
                 uses: actions/upload-artifact@v4
                 with:

@@ -20,14 +20,22 @@ class Review
     #[ManyToOne(targetEntity: Book::class)]
     private(set) Book $book;
 
+    #[ManyToOne(targetEntity: Author::class)]
+    private(set) Author $author;
+
+    #[Column(type: Types::TEXT)]
+    private(set) string $review;
+
     private function __construct()
     {
     }
 
-    public static function create(Book $book): self
+    public static function create(Book $book, Author $author, string $reviewText): self
     {
         $review = new self();
         $review->book = $book;
+        $review->author = $author;
+        $review->review = $reviewText;
 
         return $review;
     }

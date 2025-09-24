@@ -26,19 +26,12 @@ final readonly class BenchmarkResultWriter
 
     public function start(string $event): void
     {
-        if (in_array('benchmark', $this->stopwatch->getSections())) {
-            $this->stopwatch->openSection('benchmark');
-        } else {
-            $this->stopwatch->openSection();
-        }
-
         $this->stopwatch->start($event);
     }
 
     public function stop(string $event): void
     {
         $this->stopwatch->stop($event);
-        $this->stopwatch->stopSection('benchmark');
     }
 
     public function onConsoleTerminate(ConsoleTerminateEvent $event): void
@@ -52,7 +45,7 @@ final readonly class BenchmarkResultWriter
             new StreamOutput(fopen('php://stdout', 'a'))
         );
 
-        foreach ($this->stopwatch->getSectionEvents('benchmark') as $event) {
+        foreach ($this->stopwatch->getRootSectionEvents() as $event) {
             if ('__section__' === $event->getName() || '__section__.child' === $event->getName()) {
                 continue;
             }
@@ -74,11 +67,22 @@ final readonly class BenchmarkResultWriter
     private function writeCsv(): void
     {
         $csvOutput = fopen($this->outputCsvFile, 'a');
-        $events = $this->stopwatch->getSectionEvents('benchmark');
+        $events = $this->stopwatch->getRootSectionEvents();
+
+        if (!$events) {
+            return;
+        }
 
         fputcsv(
             $csvOutput,
-            ['ID Type', 'Number of root entity', 'Insert books time (ms)', 'Insert books memory (MB)'],
+            [
+                'ID Type',
+                'Number of root entity',
+                'Insert books time (ms)',
+                'Insert books memory (MB)',
+                'Select books time (ms)',
+                'Select books memory (MB)',
+            ],
             escape: '',
         );
 
@@ -89,6 +93,8 @@ final readonly class BenchmarkResultWriter
                 $this->numberOfRootEntity,
                 $events['insert-books']->getDuration(),
                 round($events['insert-books']->getMemory() / 1024 / 1024, 2),
+                $events['select-books']->getDuration(),
+                round($events['select-books']->getMemory() / 1024 / 1024, 2),
             ],
             escape: '',
         );

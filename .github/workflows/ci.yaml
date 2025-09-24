@@ -64,10 +64,8 @@ jobs:
         needs: [ build ]
         strategy:
             matrix:
-                id_type: [ int, uuid_v7 ]
-                number_of_root_entity: [ 10000 ]
-                # id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
-                # number_of_root_entity: [ 10000, 100000, 1000000 ]
+                id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
+                number_of_root_entity: [ 10000, 100000, 1000000 ]
         permissions:
             contents: read
             packages: read

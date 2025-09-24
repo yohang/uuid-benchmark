@@ -39,10 +39,6 @@ final readonly class BookMappingListener
     public function loadClassMetadata(LoadClassMetadataEventArgs $event): void
     {
         $metadata = $event->getClassMetadata();
-        if (Book::class !== $metadata->getName()) {
-            return;
-        }
-
         $builder = new ClassMetadataBuilder($metadata);
         $builder
             ->createField('id', $this->getDoctrineType())

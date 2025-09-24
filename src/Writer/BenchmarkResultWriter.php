@@ -66,7 +66,7 @@ final readonly class BenchmarkResultWriter
 
     private function writeCsv(): void
     {
-        $csvOutput = fopen($this->outputCsvFile, 'a');
+        $csvOutput = fopen($this->outputCsvFile, 'w');
         $events = $this->stopwatch->getRootSectionEvents();
 
         if (!$events) {

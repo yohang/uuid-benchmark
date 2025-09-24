@@ -33,6 +33,7 @@ final class AppFixtures extends Fixture
 
         for ($i = 1; $i <= 100; $i++) {
             $author = Author::create('Author ' . $i);
+            $this->defineId($author);
             $manager->persist($author);
 
             $this->addReference('author_' . $i, $author);
@@ -42,16 +43,7 @@ final class AppFixtures extends Fixture
         $this->resultWriter->start('insert-books');
         for ($i = 1; $i <= $this->numberOfRootEntity; $i++) {
             $book = Book::create($this->getReference('author_' . random_int(1, 100), Author::class), 'Book ' . $i);
-
-            if (BookMappingListener::ID_TYPE_INT !== $this->idType) {
-                $book->id = match ($this->idType) {
-                    BookMappingListener::ID_TYPE_UUID_V1 => Uuid::v1(),
-                    BookMappingListener::ID_TYPE_UUID_V4 => Uuid::v4(),
-                    BookMappingListener::ID_TYPE_UUID_V6 => Uuid::v6(),
-                    BookMappingListener::ID_TYPE_UUID_V7 => Uuid::v7(),
-                    default => throw new \InvalidArgumentException('Invalid ID_TYPE'),
-                };
-            }
+            $this->defineId($book);
 
             $manager->persist($book);
 
@@ -76,6 +68,7 @@ final class AppFixtures extends Fixture
                 $this->getReference('author_' . random_int(1, 100), Author::class),
                 'Review ' . $i
             );
+            $this->defineId($review);
 
             $manager->persist($review);
 
@@ -94,16 +87,25 @@ final class AppFixtures extends Fixture
         $id = $this->getReference('book_' . floor($this->numberOfRootEntity / 2), Book::class)->id;
         $this->resultWriter->start('select-books');
         for ($i = 0; $i < self::NUM_SELECT * 3; $i++) {
-            $book = $manager->getRepository(Book::class)
-                ->createQueryBuilder('book')
-                ->where('book.id = :id')
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getSingleResult(Query::HYDRATE_SIMPLEOBJECT);
+            $book = $manager->getRepository(Book::class)->find($id);
+            assert($book->title); // Loads data from doctrine proxy
 
             $manager->clear();
         }
 
         $this->resultWriter->stop('select-books');
+    }
+
+    private function defineId(object $entity): void
+    {
+        if (BookMappingListener::ID_TYPE_INT !== $this->idType) {
+            $entity->id = match ($this->idType) {
+                BookMappingListener::ID_TYPE_UUID_V1 => Uuid::v1(),
+                BookMappingListener::ID_TYPE_UUID_V4 => Uuid::v4(),
+                BookMappingListener::ID_TYPE_UUID_V6 => Uuid::v6(),
+                BookMappingListener::ID_TYPE_UUID_V7 => Uuid::v7(),
+                default => throw new \InvalidArgumentException('Invalid ID_TYPE'),
+            };
+        }
     }
 }

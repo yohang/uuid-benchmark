@@ -84,6 +84,8 @@ final readonly class BenchmarkResultWriter
                 'Insert reviews memory (MB)',
                 'Select books time (ms)',
                 'Select books memory (MB)',
+                'Select reviews time (ms)',
+                'Select reviews memory (MB)',
             ],
             escape: '',
         );
@@ -99,6 +101,8 @@ final readonly class BenchmarkResultWriter
                 round($events['insert-reviews']->getMemory() / 1024 / 1024, 2),
                 $events['select-books']->getDuration(),
                 round($events['select-books']->getMemory() / 1024 / 1024, 2),
+                $events['select-reviews']->getDuration(),
+                round($events['select-reviews']->getMemory() / 1024 / 1024, 2),
             ],
             escape: '',
         );

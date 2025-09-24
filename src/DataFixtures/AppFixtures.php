@@ -6,6 +6,7 @@ use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Review;
 use App\EventListener\BookMappingListener;
+use App\Repository\ReviewRepository;
 use App\Writer\BenchmarkResultWriter;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,9 +21,9 @@ final class AppFixtures extends Fixture
     private const int NUM_SELECT = 10_000;
 
     public function __construct(
-        #[Autowire('%env(ID_TYPE)%')] private readonly string $idType,
+        #[Autowire('%env(ID_TYPE)%')] private readonly string                $idType,
         #[Autowire('%env(int:NUMBER_OF_ROOT_ENTITY)%')] private readonly int $numberOfRootEntity,
-        private readonly BenchmarkResultWriter $resultWriter,
+        private readonly BenchmarkResultWriter                               $resultWriter, private readonly ReviewRepository $reviewRepository,
     )
     {
     }
@@ -80,7 +81,6 @@ final class AppFixtures extends Fixture
 
         $manager->flush();
         $manager->clear();
-
         $this->resultWriter->stop('insert-reviews');
 
 
@@ -92,8 +92,18 @@ final class AppFixtures extends Fixture
 
             $manager->clear();
         }
-
         $this->resultWriter->stop('select-books');
+
+
+        $id = $this->reviewRepository->findOneBy(['review' => 'Review ' . ($this->numberOfRootEntity * 5)])->id;
+        $this->resultWriter->start('select-reviews');
+        for ($i = 0; $i < self::NUM_SELECT * 3; $i++) {
+            $review = $manager->getRepository(Review::class)->find($id);
+            assert($review->title); // Loads data from doctrine proxy
+
+            $manager->clear();
+        }
+        $this->resultWriter->stop('select-reviews');
     }
 
     private function defineId(object $entity): void

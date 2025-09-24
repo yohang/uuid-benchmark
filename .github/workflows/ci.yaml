@@ -124,3 +124,10 @@ jobs:
             -   uses: geekyeggo/delete-artifact@v5
                 with:
                     name: benchmark-*-*.csv
+            -   uses: actions/setup-node@v5
+            -   name: Install CsvToMarkdownTable
+                run: npm install -g csv-to-markdown-table
+            -   name: Convert CSV to Markdown and append to summary
+                run: |
+                    echo "# Benchmark results" >> $GITHUB_STEP_SUMMARY
+                    csv-to-markdown-table benchmark-results.csv >> $GITHUB_STEP_SUMMARY

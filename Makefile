@@ -87,4 +87,4 @@ benchmark: ## Reset project fixtures
 	done
 
 test-workflow:
-	gh act --artifact-server-path=$HOME/.local.share/act/
+	gh act --artifact-server-path=$(HOME)/.local.share/act/

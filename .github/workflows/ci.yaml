@@ -64,10 +64,8 @@ jobs:
         needs: [ build ]
         strategy:
             matrix:
-                # id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
-                # number_of_root_entity: [ 10000, 100000, 1000000 ]
-                id_type: [ int, uuid_v1 ]
-                number_of_root_entity: [ 10000 ]
+                id_type: [ int, uuid_v1, uuid_v4, uuid_v6, uuid_v7 ]
+                number_of_root_entity: [ 10000, 100000, 1000000 ]
         permissions:
             contents: read
             packages: read
@@ -108,8 +106,9 @@ jobs:
                     pattern: benchmark-*.csv
             -   name: Merge benchmark results
                 run: |
+                    ls -al ./
                     head -1 $(ls benchmark-*.csv | head -1) > benchmark-results.csv
-                    find . -type f -name "benchmark-*.csv" -exec tail -1 {} \; | sort >> benchmark-results.csv
+                    find . -type f -name "benchmark-*-*.csv" -exec tail -1 {} \; | sort >> benchmark-results.csv
                     cat benchmark-results.csv
             -   name: Upload merged benchmark results
                 uses: actions/upload-artifact@v4

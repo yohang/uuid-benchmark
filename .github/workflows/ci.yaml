@@ -105,7 +105,7 @@ jobs:
                 with:
                     pattern: benchmark-*.csv
             -   name: Merge benchmark results
-                run: find . -type f -name "benchmark-*-*.csv" -exec tail -1 {} \; | sort >> benchmark-results.csv
+                run: awk 'FNR==1 && NR!=1 {next} {print}' benchmark-*.csv > benchmark-results.csv
             -   name: Upload merged benchmark results
                 uses: actions/upload-artifact@v4
                 with:

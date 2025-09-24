@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        Non optimized page
+        <a href="{{ path('homepage') }}"><small>back</small></a>
+    </h1>
+
+    <ul>
+        {% for book in pager %}
+            <li>
+                <h2>{{ book.title }}</h2>
+                <h3>Reviews</h3>
+                <ul>
+                    {% for review in book.reviews %}
+                        <li>
+                            <h4>{{ review.author }} ({{ review.author.reviews|length }})</h4>
+                            {{ review.review }}
+                        </li>
+                    {% else %}
+                        <li>No reviews</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {{ pagerfanta(pager) }}
+{% endblock %}

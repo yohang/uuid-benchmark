@@ -7,19 +7,26 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "babdev/pagerfanta-bundle": "^4.5",
         "doctrine/dbal": "^3.10.2",
         "doctrine/doctrine-bundle": "^2.16.2",
-        "doctrine/doctrine-migrations-bundle": "^3.4.2",
         "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "doctrine/doctrine-migrations-bundle": "^3.4.2",
         "doctrine/orm": "^3.5.2",
+        "pagerfanta/doctrine-orm-adapter": "^4.7",
+        "pagerfanta/twig": "^4.7",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
         "symfony/flex": "^2.8.2",
         "symfony/framework-bundle": "7.3.*",
+        "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "7.3.*",
         "symfony/stopwatch": "7.3.*",
+        "symfony/twig-bundle": "7.3.*",
         "symfony/uid": "7.3.*",
-        "symfony/yaml": "7.3.*"
+        "symfony/yaml": "7.3.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
@@ -69,7 +76,13 @@
             "php bin/console doctrine:database:drop --force --if-exists",
             "php bin/console doctrine:database:create",
             "php bin/console doctrine:schema:create",
-            "php bin/console -eprod doctrine:fixtures:load --no-interaction -vvv"
+            "php -dmemory_limit=-1 bin/console -eprod doctrine:fixtures:load --no-interaction"
+        ],
+        "reset": [
+            "php bin/console doctrine:database:drop --force --if-exists",
+            "php bin/console doctrine:database:create",
+            "php bin/console doctrine:schema:create",
+            "php bin/console doctrine:fixtures:load --no-interaction"
         ]
     },
     "conflict": {
@@ -80,5 +93,9 @@
             "allow-contrib": false,
             "require": "7.3.*"
         }
+    },
+    "require-dev": {
+        "symfony/debug-bundle": "7.3.*",
+        "symfony/web-profiler-bundle": "7.3.*"
     }
 }

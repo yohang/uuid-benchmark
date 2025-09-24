@@ -23,6 +23,7 @@ RUN set -eux; \
 	install-php-extensions \
 		@composer \
 		apcu \
+		intl \
 		opcache \
 		zip \
 		pdo_pgsql \

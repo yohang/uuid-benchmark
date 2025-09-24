@@ -37,7 +37,8 @@ cli: ## Open a shell in the php container
 first_run: frankenphp/tls/cert.pem pull build vendor/ up assets/vendor reset
 
 reset: ## Reset project fixtures
-	@$(eval env ?= 'dev')
+	@$(eval env ?= 'prod')
+	$(DOCKER_COMPOSE) exec -eAPP_ENV=$(env) php composer reset
 
 cc: ## Clear the Symfony cache
 	@$(DOCKER_COMPOSE) exec php bin/console cache:clear

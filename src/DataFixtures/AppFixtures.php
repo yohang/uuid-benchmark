@@ -68,7 +68,9 @@ final class AppFixtures extends Fixture
 
         $this->resultWriter->stop('insert-books');
 
-        for ($i = 1; $i <= $this->numberOfRootEntity * 3; $i++) {
+        $this->resultWriter->start('insert-reviews');
+
+        for ($i = 1; $i <= $this->numberOfRootEntity * 10; $i++) {
             $review = Review::create(
                 $this->getReference('book_' . random_int(1, $this->numberOfRootEntity), Book::class),
                 $this->getReference('author_' . random_int(1, 100), Author::class),
@@ -85,6 +87,8 @@ final class AppFixtures extends Fixture
 
         $manager->flush();
         $manager->clear();
+
+        $this->resultWriter->stop('insert-reviews');
 
 
         $id = $this->getReference('book_' . floor($this->numberOfRootEntity / 2), Book::class)->id;

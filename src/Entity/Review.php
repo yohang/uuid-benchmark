@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 
-#[Entity]
+#[Entity(repositoryClass: ReviewRepository::class)]
 class Review
 {
     #[Id]
@@ -17,10 +18,10 @@ class Review
     #[Column(type: Types::INTEGER)]
     private(set) int $id;
 
-    #[ManyToOne(targetEntity: Book::class)]
+    #[ManyToOne(targetEntity: Book::class, inversedBy: 'reviews')]
     private(set) Book $book;
 
-    #[ManyToOne(targetEntity: Author::class)]
+    #[ManyToOne(targetEntity: Author::class, inversedBy: 'reviews')]
     private(set) Author $author;
 
     #[Column(type: Types::TEXT)]

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ul>
+        <li>
+            <a href="{{ path('non_optimized_page', {maxPerPage: 10}) }}">Non-optimized (10 par page)</a>
+        </li>
+        <li>
+            <a href="{{ path('non_optimized_page', {maxPerPage: 25}) }}">Non-optimized (25 par page)</a>
+        </li>
+        <li>
+            <a href="{{ path('non_optimized_page', {maxPerPage: 100}) }}">Non-optimized (100 par page)</a>
+        </li>
+        <li>
+            <a href="{{ path('optimized_stage_1_page', {maxPerPage: 10}) }}">Optimised (stage 1) (10 par page)</a>
+        </li>
+        <li>
+            <a href="{{ path('optimized_stage_1_page', {maxPerPage: 25}) }}">Optimised (stage 1) (25 par page)</a>
+        </li>
+        <li>
+            <a href="{{ path('optimized_stage_1_page', {maxPerPage: 100}) }}">Optimised (stage 1) (100 par page)</a>
+        </li>
+    </ul>
+{% endblock %}

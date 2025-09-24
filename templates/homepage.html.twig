@@ -2,32 +2,16 @@
 
 {% block body %}
     <ul>
-        <li>
-            <a href="{{ path('non_optimized_page', {maxPerPage: 10}) }}">Non-optimized (10 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('non_optimized_page', {maxPerPage: 25}) }}">Non-optimized (25 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('non_optimized_page', {maxPerPage: 100}) }}">Non-optimized (100 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('optimized_stage_1_page', {maxPerPage: 10}) }}">Optimised (stage 1) (10 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('optimized_stage_1_page', {maxPerPage: 25}) }}">Optimised (stage 1) (25 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('optimized_stage_1_page', {maxPerPage: 100}) }}">Optimised (stage 1) (100 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('optimized_stage_2_page', {maxPerPage: 10}) }}">Optimised (stage 2) (10 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('optimized_stage_2_page', {maxPerPage: 25}) }}">Optimised (stage 2) (25 par page)</a>
-        </li>
-        <li>
-            <a href="{{ path('optimized_stage_2_page', {maxPerPage: 100}) }}">Optimised (stage 2) (100 par page)</a>
-        </li>
+        {% for route, text in {
+            non_optimized_page: 'Non optimized',
+            optimized_stage_1_page: 'Optimized (stage 1)',
+            optimized_stage_2_page: 'Optimized (stage 2)',
+        } %}
+            {% for maxPerPage in [10, 25, 100, 250, 500, 1000] %}
+                <li>
+                    <a href="{{ path(route, {maxPerPage}) }}">{{ text}} ({{ maxPerPage}} per page)</a>
+                </li>
+            {% endfor %}
+        {% endfor %}
     </ul>
 {% endblock %}

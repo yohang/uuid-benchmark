@@ -130,4 +130,4 @@ jobs:
             -   name: Convert CSV to Markdown and append to summary
                 run: |
                     echo "# Benchmark results" >> $GITHUB_STEP_SUMMARY
-                    csv-to-markdown-table benchmark-results.csv >> $GITHUB_STEP_SUMMARY
+                    csv-to-markdown-table --delim ',' --headers < benchmark-results.csv >> $GITHUB_STEP_SUMMARY

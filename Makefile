@@ -1,5 +1,6 @@
 DOCKER_COMPOSE = EXTERNAL_USER_ID=$(shell id -u) docker compose
 HTTPS_PORT ?= 443
+NUMBER_OF_ROOT_ENTITY = 1000000
 
 .PHONY: ps build up first_run clean logs cli run reset cc deploy down assets/vendor test hadolint
 
@@ -84,7 +85,11 @@ ID_TYPES = int uuid_v1 uuid_v4 uuid_v6 uuid_v7
 benchmark: ## Reset project fixtures
 	@$(eval env ?= 'prod')
 	for ID_TYPE in $(ID_TYPES); do \
-		$(DOCKER_COMPOSE) exec -eID_TYPE=$$ID_TYPE -eAPP_ENV=$(env) php composer benchmark; \
+		$(DOCKER_COMPOSE) exec \
+			-eID_TYPE=$$ID_TYPE \
+			-eNUMBER_OF_ROOT_ENTITY=$(NUMBER_OF_ROOT_ENTITY) \
+			-eAPP_ENV=$(env) \
+				php composer benchmark; \
 	done
 
 test-workflow:

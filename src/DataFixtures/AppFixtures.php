@@ -84,10 +84,16 @@ final class AppFixtures extends Fixture
         $this->resultWriter->stop('insert-reviews');
 
 
-        $id = $this->getReference('book_' . floor($this->numberOfRootEntity / 2), Book::class)->id;
+        $id1 = $this->getReference('book_' . floor($this->numberOfRootEntity / 3), Book::class)->id;
+        $id2 = $this->getReference('book_' . floor($this->numberOfRootEntity / 2), Book::class)->id;
+        $id3 = $this->getReference('book_' . floor($this->numberOfRootEntity / 1.5), Book::class)->id;
         $this->resultWriter->start('select-books');
-        for ($i = 0; $i < self::NUM_SELECT * 3; $i++) {
-            $book = $manager->getRepository(Book::class)->find($id);
+        for ($i = 0; $i < self::NUM_SELECT; $i++) {
+            $book = $manager->getRepository(Book::class)->find($id1);
+            assert($book->title); // Loads data from doctrine proxy
+            $book = $manager->getRepository(Book::class)->find($id2);
+            assert($book->title); // Loads data from doctrine proxy
+            $book = $manager->getRepository(Book::class)->find($id3);
             assert($book->title); // Loads data from doctrine proxy
 
             $manager->clear();
@@ -95,10 +101,16 @@ final class AppFixtures extends Fixture
         $this->resultWriter->stop('select-books');
 
 
-        $id = $this->reviewRepository->findOneBy(['review' => 'Review ' . ($this->numberOfRootEntity * 5)])->id;
+        $id1 = $this->reviewRepository->findOneBy(['review' => 'Review ' . ($this->numberOfRootEntity * 5)])->id;
+        $id2 = $this->reviewRepository->findOneBy(['review' => 'Review ' . ($this->numberOfRootEntity * 2)])->id;
+        $id3 = $this->reviewRepository->findOneBy(['review' => 'Review ' . ($this->numberOfRootEntity * 7)])->id;
         $this->resultWriter->start('select-reviews');
-        for ($i = 0; $i < self::NUM_SELECT * 3; $i++) {
-            $review = $manager->getRepository(Review::class)->find($id);
+        for ($i = 0; $i < self::NUM_SELECT; $i++) {
+            $review = $manager->getRepository(Review::class)->find($id1);
+            assert($review->title); // Loads data from doctrine proxy
+            $review = $manager->getRepository(Review::class)->find($id2);
+            assert($review->title); // Loads data from doctrine proxy
+            $review = $manager->getRepository(Review::class)->find($id3);
             assert($review->title); // Loads data from doctrine proxy
 
             $manager->clear();

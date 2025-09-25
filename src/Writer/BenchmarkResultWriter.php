@@ -3,6 +3,7 @@
 namespace App\Writer;
 
 use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\Console\Input\StringInput;
@@ -20,6 +21,7 @@ final readonly class BenchmarkResultWriter
         #[Autowire('%env(int:NUMBER_OF_ROOT_ENTITY)%')] private int $numberOfRootEntity,
         #[Autowire('%env(OUTPUT_CSV_FILE)%')] private string        $outputCsvFile,
         private Stopwatch                                           $stopwatch = new Stopwatch(),
+        private Connection                                          $connection,
     )
     {
     }
@@ -86,9 +88,12 @@ final readonly class BenchmarkResultWriter
                 'Select books memory (MB)',
                 'Select reviews time (ms)',
                 'Select reviews memory (MB)',
+                'Database size (MB)',
             ],
             escape: '',
         );
+
+        $dbSize = $this->connection->executeQuery('SELECT pg_database_size(current_database()) AS db_size')->fetchOne();
 
         fputcsv(
             $csvOutput,
@@ -103,6 +108,7 @@ final readonly class BenchmarkResultWriter
                 round($events['select-books']->getMemory() / 1024 / 1024, 2),
                 $events['select-reviews']->getDuration(),
                 round($events['select-reviews']->getMemory() / 1024 / 1024, 2),
+                round($dbSize / 1024 / 1024, 2),
             ],
             escape: '',
         );

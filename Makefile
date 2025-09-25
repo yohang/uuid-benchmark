@@ -86,6 +86,7 @@ benchmark: ## Reset project fixtures
 	@$(eval env ?= 'prod')
 	for ID_TYPE in $(ID_TYPES); do \
 		$(DOCKER_COMPOSE) exec \
+			-eCOMPOSER_PROCESS_TIMEOUT=3600 \
 			-eID_TYPE=$$ID_TYPE \
 			-eNUMBER_OF_ROOT_ENTITY=$(NUMBER_OF_ROOT_ENTITY) \
 			-eAPP_ENV=$(env) \
